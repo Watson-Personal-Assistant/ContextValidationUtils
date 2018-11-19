@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "api.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Watson-Personal-Assistant/ContextValidationUtils.git"
+  },
   "dependencies": {
       "jsonschema": "^1.2.4"
   },
