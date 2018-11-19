@@ -13,15 +13,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.ibm.com:ConsumerIoT/ContextValidation.git"
-  },
   "author": "Karol Lynch",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Watson-Personal-Assistant/ContextValidationUtils/issues"
   },
   "homepage": "https://github.com/Watson-Personal-Assistant/ContextValidationUtils#readme"
-}
 }
