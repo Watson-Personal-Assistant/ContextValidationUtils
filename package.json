@@ -1,6 +1,6 @@
 {
   "name": "wa-context-utils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "api.js",
   "repository": {
@@ -17,5 +17,11 @@
     "type": "git",
     "url": "git@github.ibm.com:ConsumerIoT/ContextValidation.git"
   },
-  "author": ""
+  "author": "Karol Lynch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Watson-Personal-Assistant/ContextValidationUtils/issues"
+  },
+  "homepage": "https://github.com/Watson-Personal-Assistant/ContextValidationUtils#readme"
+}
 }
