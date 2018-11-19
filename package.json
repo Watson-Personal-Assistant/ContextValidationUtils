@@ -1,0 +1,17 @@
+{
+  "name": "wa-context-utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "dependencies": {
+      "jsonschema": "^1.2.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.ibm.com:ConsumerIoT/ContextValidation.git"
+  },
+  "author": ""
+}

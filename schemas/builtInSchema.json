@@ -1,0 +1,142 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "id": "0.5.0.0",
+    "title": "WASSharedDataPoints",
+    "description": "A specification of the shared data points in WAS.",
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+        "currentConversation": { "$ref" : "#/definitions/Conversation" },
+        "currentLocation": { "$ref" : "#/definitions/Place" }
+    },
+
+    "definitions": {
+        "Place": {
+            "description": "Entities that have a somewhat fixed physical extension.",
+            "type": "object",
+            "additionalProperties": false,            
+            "properties": {
+                "name": {
+                    "description": "A user specified name for this place.",
+                    "type": "string"
+                },
+                "@type": {
+                    "description": "The URI of the semantic type of this object",
+                    "type": "string",
+                    "enum": ["http://schema.org/Place"]
+                },
+                "address": {
+                    "description": "Address of this place",
+                    "@type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "@type": {
+                            "description": "The URI of the semantic type of this object",
+                            "type": "string",
+                            "enum": ["http://schema.org/PostalAddress"]
+                        },
+                        "streetAddress": {
+                            "description": "The street address.",
+                            "type": "string"
+                        },
+                       "addressLocality": {
+                            "description": "The locality.",
+                            "type": "string"
+                         },
+                       "addressRegion": {
+                           "description": "The region.",
+                           "type": "string"
+                       },
+                       "postalCode": {
+                           "description": "For the postal code.",
+                           "type": "string"
+                         },
+                       "addressCountry": {
+                           "description": "For the country.",
+                           "type": "string"
+                       }
+                   },
+                   "required": ["@type"]
+               },
+               
+                "geo": {
+                    "description": "The geo coordinates of the place.",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "@type": {
+                            "description": "The URI of the semantic type of this object",
+                            "type": "string",
+                            "enum": ["http://schema.org/GeoCoordinates"]
+                        },
+                         "latitude": {
+                             "description": "The latitude of a location.  E.g. 53.346597, '53°20'47.8\"N",
+                             "type": "string"
+                         },
+                         "longitude": {
+                             "description": "The longitude of a location.  E.g. -6.235185, 6°14'06.7\"W",
+                             "type": "string"
+                         },
+                         "elevation": {
+                             "description": "The elevation of a location.",
+                             "type": "string"
+                         }
+                    },
+                    "required": ["@type"]
+
+               },
+                "customProperties": {
+                    "description": "Custom properties should be added within this object",
+                    "type": "object",
+                    "additionalProperties": true                    
+               }
+            },
+            "additionalProperties": false,
+           "required": ["@type", "name"]
+        },
+
+        "PlaceReference" : {
+            "description": "A reference to a place in a conversation",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "@type": {
+                    "description": "The URI of the semantic type of this object",
+                    "type": "string",
+                    "enum": ["http://www.ibm.com/watson-assistant-solutions/ontology/PlaceReference"]
+                },
+                "object" : { "$ref" : "#/definitions/Place" },
+                "time" : {
+                        "type": "string",
+                        "format": "date-time"},
+                "customProperties": {
+                    "description": "Custom properties should be added within this object",
+                    "type": "object",
+                    "additionalProperties": true                    
+               }
+                 },
+                "required": ["@type", "object"]
+        },
+
+        "Conversation" : {
+            "description": "The concept of a conversation within the Watson Assistant",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "@type": {
+                    "description": "The URI of the semantic type of this object",
+                    "type": "string",
+                    "enum": ["http://www.ibm.com/watson-assistant-solutions/ontology/Conversation"]
+                },
+                "lastReferencedLocation" : { "$ref" : "#/definitions/PlaceReference" },
+                "customProperties": {
+                    "description": "Custom properties should be added within this object",
+                    "type": "object",
+                    "additionalProperties": true                    
+               }
+            },
+            "required": ["@type"]
+        }
+    }
+}
