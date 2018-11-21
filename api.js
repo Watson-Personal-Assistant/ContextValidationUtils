@@ -1,3 +1,8 @@
+/*
+© Copyright IBM Corp. 2017
+*/
+
+
 var jsValidate = require('jsonschema').validate;
 const builtInSchema = require('./schemas/builtInSchema.json');
 
@@ -53,7 +58,7 @@ function getProperty(obj, iPath)
 
     if (results.hasOwnProperty('status'))
     {
-    	return results;
+        return results;
     }
     
     let fields = iPath.split(".");
@@ -106,51 +111,90 @@ function setProperty(obj, iPath, iValue) {
 
     if (results.hasOwnProperty('status'))
     {
-    	return results;
+        return results;
     }
     
     let fields = iPath.split(".");
 
     let parentProperty = getParentProperty(fields, obj, results);
 
-
     if (results.hasOwnProperty('status') === false)
     {
-		if (iValue.hasOwnProperty("leafValue"))
-		{
-			parentProperty[fields[(fields.length - 1)]] = iValue.leafValue;
-		}
-		else
-		{
-			parentProperty[fields[(fields.length - 1)]] = iValue;
-		}
+        let propExists = parentProperty.hasOwnProperty( fields[(fields.length - 1)]);
+        let origProp = {};
+        if (propExists)
+        {
+            origProp = JSON.parse(JSON.stringify(parentProperty[fields[(fields.length - 1)]]));
+        }
 
-		results.valid = true;
-		results.msg = "Success";
-		results.obj = obj;
+        if (iValue.hasOwnProperty("leafValue"))
+        {
+            parentProperty[fields[(fields.length - 1)]] = iValue.leafValue;
+        }
+        else
+        {
+            parentProperty[fields[(fields.length - 1)]] = iValue;
+        }
+        
+        let parseResults = validateBuiltinContext(obj);
+        if (parseResults.valid === true )
+        {
+            results.valid = true;
+            results.msg = "Successfully updated property";
+            results.status = 200;
+            results.obj = obj;
+        }
+        else
+        {
+            if (propExists)
+            {
+                parentProperty[fields[(fields.length - 1)]] = origProp;
+            }
+            else
+            {
+                delete parentProperty[fields[(fields.length - 1)]];
+            }
+            results.valid = false;
+            results.msg = parseResults.errors;
+            results.status = 400;
+            results.obj = obj;
+        }
     }
     return results;
 }
 
 function deleteSpecificProperty(fields, obj, parentProperty, results)
 {
-	if (parentProperty.hasOwnProperty(fields[ (fields.length - 1) ]))
-	{
-		delete parentProperty[fields[(fields.length - 1)]];
+    if (parentProperty.hasOwnProperty(fields[ (fields.length - 1) ]))
+    {
+        let origProp = JSON.parse(JSON.stringify(parentProperty[fields[(fields.length - 1)]]));
 
-		results.valid = true;
-		results.msg = "Success";
-		results.status = 200;
-		results.obj = obj;
+        delete parentProperty[fields[(fields.length - 1)]];
 
-	}
-	else
-	{
-		results.valid = false;
-		results.msg = "Built-in context property does not exist."
-		results.status = 404;
-	}
-	return;
+        let parseResults = validateBuiltinContext(obj);
+        if (parseResults.valid === true )
+        {
+            results.valid = true;
+            results.msg = "Successfully deleted property";
+            results.status = 200;
+            results.obj = obj;
+        }
+        else
+        {
+            parentProperty[fields[(fields.length - 1)]] = origProp;
+            results.valid = false;
+            results.msg = parseResults.errors;
+            results.status = 400;
+            results.obj = obj;
+        }
+    }
+    else
+    {
+        results.valid = false;
+        results.msg = "Built-in context property does not exist."
+        results.status = 404;
+    }
+    return;
 }
 
 /* Delete property at iPath from obj. */
@@ -160,7 +204,7 @@ function deleteProperty(obj, iPath)
 
     if (results.hasOwnProperty('status'))
     {
-    	return results;
+        return results;
     }
 
     let fields = iPath.split(".");
