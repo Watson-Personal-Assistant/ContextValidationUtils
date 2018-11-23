@@ -2,6 +2,13 @@
 © Copyright IBM Corp. 2017
 */
 
+/**
+ * @typedef {Object} Results
+ * @property {Boolean} valid true if correctly processed, otherwise false.
+ * @property {number} status HTTP status code - 200 code, 400, 404 errors
+ * @property {string} msg A message describing error (400/404) or reporting success (200).
+ * @property {Object} obj The updated object (remains unchanged in case of error).
+ */
 
 var jsValidate = require('jsonschema').validate;
 const builtInSchema = require('./schemas/builtInSchema.json');
@@ -49,8 +56,18 @@ function validatePath(iPath)
 }
     
 
-/* Get property at iPath in object obj. */
-function getProperty(obj, iPath)
+/**
+ * This function can be used to get properties in the built-in context.
+ *
+ * @param    {Object}   obj
+ *           The built-in context object.
+ * @param    {string}   iPath
+ *           The path to the property to get.  Dot notation is used.
+ *
+ * @return   {Results} 
+ *           The results object (described above).
+ */
+ function getProperty(obj, iPath)
 {
     let sObj = obj;    
     
@@ -105,8 +122,22 @@ function getParentProperty(fields, sObj, results)
     return sObj;
 }
 
-/* Update obj by setting property at iPath to iValue. */
-function setProperty(obj, iPath, iValue) {
+/**
+ * This function can be used to set properties in the built-in context.
+ *
+ * This function will not set a property if doing so makes the built-in context 
+ * non-conformant with the built-in context schema.
+ *
+ * @param    {Object}   obj
+ *           The built-in context object.
+ * @param    {string}   iPath
+ *           The path to the property to set.  Dot notation is used.
+ * @param    {*}   iValue
+ *           The value to set the property too.
+ * @return   {Results} 
+ *           The results object (described above).
+ */
+ function setProperty(obj, iPath, iValue) {
     let results = validatePath(iPath);
 
     if (results.hasOwnProperty('status'))
@@ -197,7 +228,19 @@ function deleteSpecificProperty(fields, obj, parentProperty, results)
     return;
 }
 
-/* Delete property at iPath from obj. */
+/**
+ * This function can be used to delete properties from the built-in context.
+ *
+ * This function will not delete a property if doing so makes the built-in context 
+ * non-conformant with the built-in context schema.
+ *
+ * @param    {Object}   obj
+ *           The built-in context object.
+ * @param    {string}   iPath
+ *           The path to the property to delete.  Dot notation is used.
+ * @return   {Results} 
+ *           The results object (described above).
+ */
 function deleteProperty(obj, iPath)
 {
     let results = validatePath(iPath);
